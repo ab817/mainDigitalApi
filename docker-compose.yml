@@ -1,25 +1,24 @@
 services:
   db:
-    image: mysql:8.0.26
+    image: postgres
     ports:
-      - 3306:3306
+      - 5433:5432
     environment:
-      MYSQL_ROOT_PASSWORD: P@ssw0rd
-      MYSQL_DATABASE: digitalsupport
-      MYSQL_USER: digitalsupport
-      MYSQL_PASSWORD: Digital@support
+      POSTGRES_DB: maindigital
+      POSTGRES_USER: main_digital
+      POSTGRES_PASSWORD: P@ssword123
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 30s
       timeout: 30s
       retries: 10
-    restart: always
     volumes:
-      - /var/backup/digitalsupport:/var/lib/mysql
+      - /var/backup/main_digital:/var/lib/postgresql/data
     networks:
-      - application
+      - maindigital_network
 
   migration:
-    image: digital_support:latest
+    image: main_digital:latest
     profiles: [initialize]
     depends_on:
       db:
@@ -28,22 +27,21 @@ services:
       - .env
     command: bash -c "python manage.py makemigrations && python manage.py migrate"
     networks:
-      - application
+      - maindigital_network
 
   app:
-    image: digital_support:latest
+    image: main_digital:latest
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - 172.16.15.131:8000:8000
+      - "172.16.15.131:8002:8000"
     env_file:
       - .env
-    restart: always
-    volumes:
-      - ./:/app
     networks:
-      - application
+      - maindigital_network
+    volumes:
+      - .:/app
 
 networks:
-  application:
+  maindigital_network:
