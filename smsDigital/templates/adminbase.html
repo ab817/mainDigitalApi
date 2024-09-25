@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Digital Support ADBL</title>
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <link rel="icon" href="{% static 'adbl.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light" id="adminNav" style="background-color: #1A5DAB;">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">Admin Panel</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'admin:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link text-white font-weight-bold">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex" style="min-height: 100vh;">
+        <!-- Sidebar -->
+        <div class="bg-dark text-white" style="width: 250px; padding: 15px;">
+            <h4>Navigation</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'send_unicast_sms' %}">Unicast SMS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'send_bulk_sms' %}">Bulk SMS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'sms_report' %}">SMS Report</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-wrapper flex-fill">
+            {% block content %}
+            <!-- Admin Content Goes here -->
+            {% endblock content %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-3 text-light" style="background-color: #1A5DAB; position: relative; bottom: 0; width: 100%;">
+        <p class="m-0 text-center">Digital Banking Department - ADBL 2024</p>
+    </footer>
+</body>
+</html>
