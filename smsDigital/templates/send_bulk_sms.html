@@ -1,7 +1,14 @@
+{% extends "adminbase.html" %}
 
-<h2>Send Bulk SMS</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send Bulk SMS</button>
-</form>
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Send Bulk SMS</h2>
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Send Bulk SMS</button>
+    </form>
+</div>
+{% endblock %}
