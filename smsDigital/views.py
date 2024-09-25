@@ -1,11 +1,14 @@
+import os
 import requests
+import pandas as pd
 from django.shortcuts import render, redirect
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
-#unicast
+# Unicast SMS
 def send_unicast_sms(request):
     if request.method == 'POST':
         form = UnicastSMSForm(request.POST)
@@ -23,13 +26,24 @@ def send_unicast_sms(request):
                 f"message={message}"
             )
             response = requests.get(url)
-            status = 'Sent' if response.status_code == 200 else 'Failed'
+            response_text = response.text
+
+            # Determine status based on response
+            if "Message received" in response_text:
+                status = 'Sent'
+            elif "Invalid SMS123Go username or password" in response_text:
+                status = 'Failed: Invalid credentials'
+            elif "Failed sending message" in response_text:
+                status = 'Failed: Invalid mobile number'
+            else:
+                status = 'Failed: Unknown error'
+
             # Log the SMS
             SMSLog.objects.create(
                 mobile_number=mobile_number,
                 message=message,
                 status=status,
-                response=response.text
+                response=response_text
             )
             return redirect('sms_report')  # Redirect to reporting page after sending
     else:
@@ -38,9 +52,7 @@ def send_unicast_sms(request):
     return render(request, 'send_unicast_sms.html', {'form': form})
 
 
-#bulkmessage
-import pandas as pd
-
+# Bulk SMS
 @login_required
 def send_bulk_sms(request):
     if request.method == 'POST':
@@ -63,13 +75,24 @@ def send_bulk_sms(request):
                     f"message={message}"
                 )
                 response = requests.get(url)
-                status = 'Sent' if response.status_code == 200 else 'Failed'
+                response_text = response.text
+
+                # Determine status based on response
+                if "Message received" in response_text:
+                    status = 'Sent'
+                elif "Invalid SMS123Go username or password" in response_text:
+                    status = 'Failed: Invalid credentials'
+                elif "Failed sending message" in response_text:
+                    status = 'Failed: Invalid mobile number'
+                else:
+                    status = 'Failed: Unknown error'
+
                 # Log the SMS
                 SMSLog.objects.create(
                     mobile_number=mobile_number,
                     message=message,
                     status=status,
-                    response=response.text
+                    response=response_text
                 )
             return redirect('sms_report')  # Redirect to reporting page after bulk SMS
     else:
@@ -77,8 +100,9 @@ def send_bulk_sms(request):
 
     return render(request, 'send_bulk_sms.html', {'form': form})
 
+
 @login_required
-#reporting
+# Reporting
 def sms_report(request):
     logs = SMSLog.objects.all().order_by('-sent_at')
     return render(request, 'sms_report.html', {'logs': logs})
