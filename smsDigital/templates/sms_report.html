@@ -1,0 +1,22 @@
+
+<h2>SMS Report</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Mobile Number</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Sent At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.mobile_number }}</td>
+            <td>{{ log.message }}</td>
+            <td>{{ log.status }}</td>
+            <td>{{ log.sent_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
