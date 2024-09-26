@@ -2,7 +2,7 @@ import os
 import time
 import requests
 import pandas as pd
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog
@@ -110,10 +110,12 @@ def send_bulk_sms(request):
 
 @login_required
 def sms_report(request):
-    logs_list = SMSLog.objects.all().order_by('-sent_at')
-    paginator = Paginator(logs_list, 20)  # Show 20 logs per page
-
+    logs = SMSLog.objects.all().order_by('-sent_at')
+    paginator = Paginator(logs, 20)  # Show 20 logs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'sms_report.html', {'page_obj': page_obj})
+    context = {
+        'logs_page_obj': page_obj,
+    }
+    return render(request, 'sms_report.html', context)
