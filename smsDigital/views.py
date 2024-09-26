@@ -1,11 +1,11 @@
 import os
+import time
 import requests
 import pandas as pd
 from django.shortcuts import render, redirect
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog
 from django.contrib.auth.decorators import login_required
-
 
 @login_required
 # Unicast SMS
@@ -64,7 +64,7 @@ def send_bulk_sms(request):
             for index, row in df.iterrows():
                 mobile_number = row['mobile_number']
                 message = row['message']
-                # Send SMS for each row
+
                 # Construct the URL using environment variables
                 url = (
                     f"http://{os.getenv('SMS_API_IP')}/http.aspx?"
@@ -96,6 +96,10 @@ def send_bulk_sms(request):
                     status=status,
                     response=response_text
                 )
+
+                # Introduce a 1-second delay before sending the next SMS
+                time.sleep(1)
+
             return redirect('sms_report')  # Redirect to reporting page after bulk SMS
     else:
         form = BulkSMSForm()
