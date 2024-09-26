@@ -25,7 +25,7 @@ def send_unicast_sms(request):
                 f"mobileNumber=%2b977{mobile_number}&"
                 f"message={message}"
             )
-            print(url)
+
             response = requests.get(url)
             response_text = response.text
 
@@ -76,6 +76,7 @@ def send_bulk_sms(request):
                     f"message={message}"
                 )
                 response = requests.get(url)
+                print(url)
                 response_text = response.text
 
                 # Determine status based on response
