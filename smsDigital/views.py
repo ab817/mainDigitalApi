@@ -72,7 +72,7 @@ def send_bulk_sms(request):
                     f"username={os.getenv('SMS_API_USERNAME')}&"
                     f"password={os.getenv('SMS_API_PASSWORD')}&"
                     f"countryCode=np&"
-                    f"mobileNumber=%2b{mobile_number}&"
+                    f"mobileNumber=%2b977{mobile_number}&"
                     f"message={message}"
                 )
                 response = requests.get(url)
