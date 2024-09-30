@@ -21,6 +21,9 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <button type="#" class="btn btn-link nav-link text-white font-weight-bold">{{ user.username }}</button>
+                    </li>
+                    <li class="nav-item">
                         <form method="post" action="{% url 'admin:logout' %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link nav-link text-white font-weight-bold">Logout</button>
@@ -36,15 +39,24 @@
         <div class="bg-dark text-white" style="width: 250px; padding: 15px;">
             <h4>Navigation</h4>
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'send_unicast_sms' %}">Unicast SMS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'send_bulk_sms' %}">Bulk SMS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'sms_report' %}">SMS Report</a>
-                </li>
+                {% if user.groups.all.0.name == "RoleBranch" %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'send_unicast_sms' %}">Unicast SMS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'send_bulk_sms' %}">Bulk SMS</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'send_unicast_sms' %}">Unicast SMS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'send_bulk_sms' %}">Bulk SMS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'sms_report' %}">SMS Report</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
 
