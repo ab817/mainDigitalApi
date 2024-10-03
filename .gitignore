@@ -3,6 +3,7 @@
 __pycache__/
 *.sw[op]
 .Python
+.pyc
 
 # Django
 *.log
