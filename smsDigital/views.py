@@ -4,6 +4,8 @@ import requests
 import pandas as pd
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
+from django.utils import timezone
+
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog
 from django.contrib.auth.decorators import login_required
@@ -45,7 +47,8 @@ def send_unicast_sms(request):
                 message=message,
                 status=status,
                 response=response_text,
-                user=request.user  # Log the user who sent the SMS
+                user=request.user , # Log the user who sent the SMS
+                sent_at = timezone.localtime()
             )
             return redirect('sms_report')  # Redirect to reporting page after sending
     else:
@@ -95,7 +98,8 @@ def send_bulk_sms(request):
                     message=message,
                     status=status,
                     response=response_text,
-                    user=request.user  # Log the user who sent the SMS
+                    user=request.user,  # Log the user who sent the SMS
+                    sent_at = timezone.localtime()
                 )
 
                 # Introduce a 1-second delay before sending the next SMS
