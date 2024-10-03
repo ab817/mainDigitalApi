@@ -21,7 +21,7 @@
                         <td>{{ log.mobile_number }}</td>
                         <td>{{ log.message }}</td>
                         <td>{{ log.status }}</td>
-                        <td>{{ log.sent_at }}</td>
+                        <td>{{ log.sent_at|localtime:"Y-m-d H:i:s" }}</td>
                         <td>{{ log.user.username }}</td>  <!-- Display the user -->
                     </tr>
                     {% empty %}
