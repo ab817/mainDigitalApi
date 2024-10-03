@@ -8,7 +8,7 @@ class SMSLog(models.Model):
     mobile_number = models.CharField(max_length=15)
     message = models.TextField()
     status = models.CharField(max_length=250)  # Sent, Failed, etc.
-    sent_at = models.DateTimeField()
+    sent_at = models.DateTimeField(default=timezone.now)
     response = models.TextField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Add this field
 
