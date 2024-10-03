@@ -48,7 +48,7 @@ def send_unicast_sms(request):
                 status=status,
                 response=response_text,
                 user=request.user , # Log the user who sent the SMS
-                sent_at = timezone.localtime()
+                sent_at = timezone.now()
             )
             return redirect('sms_report')  # Redirect to reporting page after sending
     else:
@@ -99,7 +99,7 @@ def send_bulk_sms(request):
                     status=status,
                     response=response_text,
                     user=request.user,  # Log the user who sent the SMS
-                    sent_at = timezone.localtime()
+                    sent_at = timezone.now()
                 )
 
                 # Introduce a 1-second delay before sending the next SMS
