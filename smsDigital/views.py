@@ -9,7 +9,6 @@ from .models import SMSLog
 from django.contrib.auth.decorators import login_required
 
 @login_required
-# Unicast SMS
 def send_unicast_sms(request):
     if request.method == 'POST':
         form = UnicastSMSForm(request.POST)
@@ -40,12 +39,13 @@ def send_unicast_sms(request):
             else:
                 status = 'Failed: Unknown error'
 
-            # Log the SMS
+            # Log the SMS along with the user
             SMSLog.objects.create(
                 mobile_number=mobile_number,
                 message=message,
                 status=status,
-                response=response_text
+                response=response_text,
+                user=request.user  # Log the user who sent the SMS
             )
             return redirect('sms_report')  # Redirect to reporting page after sending
     else:
@@ -77,7 +77,6 @@ def send_bulk_sms(request):
                     f"message={message}"
                 )
                 response = requests.get(url)
-                print(url)
                 response_text = response.text
 
                 # Determine status based on response
@@ -90,12 +89,13 @@ def send_bulk_sms(request):
                 else:
                     status = 'Failed: Unknown error'
 
-                # Log the SMS
+                # Log the SMS along with the user
                 SMSLog.objects.create(
                     mobile_number=mobile_number,
                     message=message,
                     status=status,
-                    response=response_text
+                    response=response_text,
+                    user=request.user  # Log the user who sent the SMS
                 )
 
                 # Introduce a 1-second delay before sending the next SMS
