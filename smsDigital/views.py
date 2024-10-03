@@ -119,6 +119,10 @@ def sms_report(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Convert the sent_at timestamps to local time
+    for log in page_obj:
+        log.sent_at = timezone.localtime(log.sent_at)
+
     context = {
         'logs_page_obj': page_obj,
     }
