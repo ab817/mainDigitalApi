@@ -119,7 +119,7 @@ TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 LOGIN_URL = '/login/'  # Change this to the correct login path
 
