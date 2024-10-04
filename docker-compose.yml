@@ -12,6 +12,7 @@ services:
       interval: 30s
       timeout: 30s
       retries: 10
+    restart: always
     volumes:
       - /var/backup/main_digital:/var/lib/postgresql/data
     networks:
@@ -40,6 +41,7 @@ services:
       - .env
     networks:
       - maindigital_network
+    restart: always
     volumes:
       - .:/app
 
