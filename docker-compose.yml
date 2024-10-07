@@ -40,8 +40,6 @@ services:
       - "172.16.15.131:8002:8000"
     env_file:
       - .env
-    environment:
-      TZ: Asia/Kathmandu
     networks:
       - maindigital_network
     restart: always
