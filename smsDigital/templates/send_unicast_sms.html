@@ -9,6 +9,11 @@
                     <h4 class="mb-0">Send Unicast SMS</h4>
                 </div>
                 <div class="card-body">
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endif %}
                     <form method="post" novalidate>
                         {% csrf_token %}
                         <div class="form-row">

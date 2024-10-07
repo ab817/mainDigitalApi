@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <button type="#" class="btn btn-link nav-link text-white font-weight-bold">{{ user.username }}</button>
+                         <button type="#" class="btn btn-link nav-link text-white font-weight-bold">{{ user.username }} - SMS Count: {{ user.userprofile.sms_count }}</button>
                     </li>
                     <li class="nav-item">
                         <form method="post" action="{% url 'admin:logout' %}">

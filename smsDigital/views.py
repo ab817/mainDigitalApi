@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from .forms import UnicastSMSForm, BulkSMSForm
-from .models import SMSLog
+from .models import SMSLog, UserProfile
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -17,6 +17,15 @@ def send_unicast_sms(request):
         if form.is_valid():
             mobile_number = form.cleaned_data['mobile_number']
             message = form.cleaned_data['message']
+
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            if user_profile.sms_count <= 0:
+                return render(request, 'send_unicast_sms.html', {
+                    'form': form,
+                    'error': 'SMS limit reached. Please contact admin.'
+                })
+
             # API call to send SMS
             url = (
                 f"http://{os.getenv('SMS_API_IP')}/http.aspx?"
@@ -50,6 +59,11 @@ def send_unicast_sms(request):
                 user=request.user , # Log the user who sent the SMS
                 sent_at = timezone.now()
             )
+
+            if status == 'Sent':
+                user_profile.sms_count -= 1  # Decrement sms_count
+                user_profile.save()  # Save the updated count
+
             return redirect('sms_report')  # Redirect to reporting page after sending
     else:
         form = UnicastSMSForm()
@@ -62,6 +76,14 @@ def send_unicast_sms(request):
 def send_bulk_sms(request):
     if request.method == 'POST':
         form = BulkSMSForm(request.POST, request.FILES)
+        user_profile = UserProfile.objects.get(user=request.user)
+
+        if user_profile.sms_count <= 0:
+            return render(request, 'send_bulk_sms.html', {
+                'form': form,
+                'error': 'SMS limit reached. Please contact admin.'
+            })
+
         if form.is_valid():
             excel_file = request.FILES['excel_file']
             df = pd.read_excel(excel_file)
@@ -101,6 +123,10 @@ def send_bulk_sms(request):
                     user=request.user,  # Log the user who sent the SMS
                     sent_at = timezone.now()
                 )
+
+                if status == 'Sent':
+                    user_profile.sms_count -= 1
+                    user_profile.save()
 
                 # Introduce a 1-second delay before sending the next SMS
                 time.sleep(1)
