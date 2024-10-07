@@ -17,6 +17,8 @@ services:
     restart: always
     volumes:
       - /var/backup/main_digital:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro    # Mounting host timezone
+      - /etc/timezone:/etc/timezone:ro 
     networks:
       - maindigital_network
 
