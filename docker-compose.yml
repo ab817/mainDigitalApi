@@ -4,8 +4,8 @@ services:
     ports:
       - 5433:5432
     environment:
-      TZ: Asia/Kathmandu
-      PGTZ: Asia/Kathmandu
+      TZ: UTC
+      PGTZ: UTC
       POSTGRES_DB: maindigital
       POSTGRES_USER: main_digital
       POSTGRES_PASSWORD: P@ssword123
