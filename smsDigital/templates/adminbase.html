@@ -39,7 +39,7 @@
         <div class="bg-dark text-white" style="width: 250px; padding: 15px;">
             <h4>Navigation</h4>
             <ul class="nav flex-column">
-                {% if user.groups.all.0.name == "RoleBranch" %}
+                {% if user.groups.all.0.name == "RoleBranch" or user.groups.all.0.name == "hr"%}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{% url 'send_unicast_sms' %}">Unicast SMS</a>
                     </li>

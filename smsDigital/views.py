@@ -9,8 +9,10 @@ from django.utils import timezone
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog, UserProfile
 from django.contrib.auth.decorators import login_required
+from .decorators import role_required
 
 @login_required
+@role_required(allowed_roles=['hr','RoleBranch', 'super'])
 def send_unicast_sms(request):
     if request.method == 'POST':
         form = UnicastSMSForm(request.POST)
@@ -73,6 +75,7 @@ def send_unicast_sms(request):
 
 # Bulk SMS
 @login_required
+@role_required(allowed_roles=['hr','RoleBranch', 'super'])
 def send_bulk_sms(request):
     if request.method == 'POST':
         form = BulkSMSForm(request.POST, request.FILES)
@@ -139,6 +142,7 @@ def send_bulk_sms(request):
 
 
 @login_required
+@role_required(allowed_roles=['super'])
 def sms_report(request):
     logs = SMSLog.objects.all().order_by('-sent_at')
     paginator = Paginator(logs, 20)  # Show 20 logs per page
