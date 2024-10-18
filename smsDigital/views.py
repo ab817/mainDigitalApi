@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import role_required
 
 @login_required
-@role_required(allowed_roles=['hr','RoleBranch', 'super'])
+@role_required(allowed_roles=['RoleDepartment','RoleBranch','RoleDigital', 'super'])
 def send_unicast_sms(request):
     if request.method == 'POST':
         form = UnicastSMSForm(request.POST)
@@ -75,7 +75,7 @@ def send_unicast_sms(request):
 
 # Bulk SMS
 @login_required
-@role_required(allowed_roles=['hr','RoleBranch', 'super'])
+@role_required(allowed_roles=['RoleDepartment','RoleDigital','RoleBranch', 'super'])
 def send_bulk_sms(request):
     if request.method == 'POST':
         form = BulkSMSForm(request.POST, request.FILES)
