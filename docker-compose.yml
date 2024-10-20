@@ -4,13 +4,9 @@ services:
     ports:
       - 5433:5432
     environment:
-      TZ: UTC
-      PGTZ: UTC
       POSTGRES_DB: maindigital
       POSTGRES_USER: main_digital
       POSTGRES_PASSWORD: P@ssword123
-      
-      
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 30s
