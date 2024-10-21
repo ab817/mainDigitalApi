@@ -146,7 +146,7 @@ def send_bulk_sms(request):
 @role_required(allowed_roles=['super', 'RoleDepartment', 'RoleBranch', 'RoleDigital'])
 def sms_report(request):
     # Check if the user is a superuser
-    if request.user.is_superuser:
+    if request.user.groups.filter(name='super').exists():
         logs = SMSLog.objects.all().order_by('-sent_at')  # Superusers can see all logs
     else:
         logs = SMSLog.objects.filter(user=request.user).order_by('-sent_at')  # Other users only see their own logs
@@ -161,6 +161,7 @@ def sms_report(request):
 
     context = {
         'logs_page_obj': page_obj,
+        'is_superuser': request.user.groups.filter(name='super').exists()  # Pass superuser status to the template
     }
     return render(request, 'sms_report.html', context)
 
