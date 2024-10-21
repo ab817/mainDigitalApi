@@ -143,9 +143,14 @@ def send_bulk_sms(request):
 
 
 @login_required
-@role_required(allowed_roles=['super'])
+@role_required(allowed_roles=['super', 'RoleDepartment', 'RoleBranch', 'RoleDigital'])
 def sms_report(request):
-    logs = SMSLog.objects.all().order_by('-sent_at')
+    # Check if the user is a superuser
+    if request.user.is_superuser:
+        logs = SMSLog.objects.all().order_by('-sent_at')  # Superusers can see all logs
+    else:
+        logs = SMSLog.objects.filter(user=request.user).order_by('-sent_at')  # Other users only see their own logs
+
     paginator = Paginator(logs, 20)  # Show 20 logs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

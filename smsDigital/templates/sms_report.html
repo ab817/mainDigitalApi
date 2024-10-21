@@ -12,7 +12,7 @@
                         <th>Message</th>
                         <th>Status</th>
                         <th>Sent At</th>
-                        <th>Sent By</th>  <!-- New column -->
+                        <th>Sent By</th>  <!-- New column for the superuser only -->
                     </tr>
                 </thead>
                 <tbody>
@@ -22,7 +22,12 @@
                         <td>{{ log.message }}</td>
                         <td>{{ log.status }}</td>
                         <td>{{ log.sent_at|date:"Y-m-d H:i:s" }}</td>
+                        <!-- Show Sent By only if the user is a superuser -->
+                        {% if user.is_superuser %}
                         <td>{{ log.user.username }}</td>  <!-- Display the user -->
+                        {% else %}
+                        <td>Yourself</td> <!-- For non-superusers, display 'Yourself' -->
+                        {% endif %}
                     </tr>
                     {% empty %}
                     <tr>
@@ -68,7 +73,6 @@
                     {% endif %}
                 </ul>
             </nav>
-
         </div>
     </div>
 </div>
