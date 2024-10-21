@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sms/', include('smsDigital.urls')),  # Include the SMS app URLs
     path('login/', auth_views.LoginView.as_view(), name='login'),  # Login page
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # Logout page
+    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # Logout page
 ]

@@ -24,7 +24,7 @@
                          <button type="#" class="btn btn-link nav-link text-white font-weight-bold">{{ user.username }} - SMS Count: {{ user.userprofile.sms_count }}</button>
                     </li>
                     <li class="nav-item">
-                        <form method="post" action="{% url 'admin:logout' %}">
+                        <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link nav-link text-white font-weight-bold">Logout</button>
                         </form>

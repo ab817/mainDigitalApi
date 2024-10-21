@@ -9,6 +9,7 @@ from django.utils import timezone
 from .forms import UnicastSMSForm, BulkSMSForm
 from .models import SMSLog, UserProfile
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from .decorators import role_required
 
 @login_required
@@ -157,3 +158,7 @@ def sms_report(request):
         'logs_page_obj': page_obj,
     }
     return render(request, 'sms_report.html', context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect('login')
